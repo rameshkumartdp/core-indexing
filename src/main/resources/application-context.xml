@@ -1,0 +1,199 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<beans xmlns:util="http://www.springframework.org/schema/util"
+       xmlns:context="http://www.springframework.org/schema/context"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns="http://www.springframework.org/schema/beans"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans
+		http://www.springframework.org/schema/beans/spring-beans-3.2.xsd
+		http://www.springframework.org/schema/util
+		http://www.springframework.org/schema/util/spring-util-3.2.xsd
+		http://www.springframework.org/schema/context
+		http://www.springframework.org/schema/context/spring-context-3.2.xsd">
+
+    <import resource="classpath:/search-datasources-mongo.xml"/>
+
+
+    <context:annotation-config/>
+    <context:component-scan base-package="com.shc.*">
+        <!--<context:exclude-filter type="annotation" expression="com.shc.common.jsonp.servlet.filter.MyAnnotation"/>-->
+    </context:component-scan>
+
+    <bean id="propertyConfigurer"
+          class="org.springframework.beans.factory.config.PropertyPlaceholderConfigurer">
+        <property name="systemPropertiesModeName" value="SYSTEM_PROPERTIES_MODE_OVERRIDE"/>
+        <property name="locations">
+            <list>
+                <!--<value>classpath:/search-doc-builder.properties</value>-->
+                <value>classpath:/db.properties</value>
+                <value>classpath:/browseBoostScale.properties</value>
+            </list>
+        </property>
+
+    </bean>
+
+    <!-- this bean must not be lazily initialized if the jmx exporting is to happen -->
+    <bean id="exporter" class="org.springframework.jmx.export.MBeanExporter" lazy-init="false">
+        <property name="beans">
+            <map>
+                <entry key="bean:name=sysstatsbean" value-ref="systemStatsMBean"/>
+            </map>
+        </property>
+    </bean>
+
+    <bean id="metricsManager" class="com.shc.common.monitoring.MetricManager"/>
+    <!--<bean id="metricsManager" class="com.monitoring.DummyMetricManager" />-->
+
+    <bean id="myProperties" class="com.shc.ecom.rtc.util.SHCReloadableResourceBundle">
+        <property name="cacheSeconds" value="1"/>
+        <property name="basenames">
+            <list>
+                <value>db</value>
+                <value>greenbox</value>
+            </list>
+        </property>
+        <!-- check property file(s) every 1 second -->
+        <property name="localCacheSeconds" value="120"/>
+        <property name="localBasenames">
+            <list>
+                <value>db</value>
+                <value>greenbox</value>
+            </list>
+        </property>
+    </bean>
+
+    <!--<util:properties id="appProperties" location="classpath:search-doc-builder.properties" />-->
+
+    <bean id="systemStatsMBean" class="com.shc.ecom.search.jmx.SystemStats"/>
+
+	<util:list id="domainRules" value-type="com.shc.ecom.search.rules.IRule">
+        <ref bean="contentExistenceRule"/>
+        <ref bean="eligibleCatentrySubTypeRule"/>
+    </util:list>
+    
+    <util:list id="contentRules" value-type="com.shc.ecom.search.rules.IRule">
+        <ref bean="isKmartPRDropRule"/>
+        <ref bean="contentDisplayEligibleRule"/>
+        <ref bean="hierarchyExistenceRule"/>
+        <ref bean="identityExistenceRule"/>
+        <ref bean="markForDeleteRule"/>
+        <ref bean="fitmentRule"/>
+        <!-- <ref bean="retiredTaxonomyRule" /> -->
+    </util:list>
+
+    <util:list id="bundleRules" value-type="com.shc.ecom.search.rules.IRule">
+        <ref bean="bundleSitesRule"/>
+        <ref bean="bundleHierarchyExistenceRule"/>
+        <ref bean="bundleMarkForDeleteRule"/>
+        <ref bean="bundleDisplayEligibleRule"/>
+        <ref bean="bundleFitmentRule"/>
+    </util:list>
+
+    <util:list id="rankingRules" value-type="com.shc.ecom.search.rules.IRule">
+        <ref bean="rankingRule"/>
+    </util:list>
+
+    <util:list id="taxonomyRules" value-type="com.shc.ecom.search.rules.IRule">
+        <ref bean="retiredTaxonomyRule"/>
+    </util:list>
+
+    <util:list id="offerRules" value-type="com.shc.ecom.search.rules.IRule">
+        <ref bean="offerDisplayEligibleRule"/>
+        <ref bean="offerTypeExistenceRule"/>
+        <ref bean="operationalSitesExistenceRule"/>
+        <ref bean="searchSupressionRule"/>
+        <ref bean="sitesExistenceRule"/>
+        <ref bean="ssinExistenceRule"/>
+        <ref bean="sywExclusiveRule"/>
+        <ref bean="uidExistenceRule"/>
+        <ref bean="offerMarketPlaceRule"/>
+        <ref bean="offerAutomotiveRule"/>
+        <ref bean="offerEBayRule"/>
+    </util:list>
+
+    <util:list id="contentOfferRules" value-type="com.shc.ecom.search.rules.IRule">
+        <ref bean="siteEligRule"/>
+    </util:list>
+
+    <util:list id="storeRules" value-type="com.shc.ecom.search.rules.IRule">
+        <ref bean="productStoreEligibleRule"/>
+    </util:list>
+
+
+    <util:list id="priceRules" value-type="com.shc.ecom.search.rules.IRule">
+        <ref bean="priceExistenceRule"/>
+    </util:list>
+
+    <util:list id="uasRules" value-type="com.shc.ecom.search.rules.IRule">
+        <ref bean="outOfStockOfferRule"/>
+    </util:list>
+
+    <!-- ******************************************************************************************************************** -->
+    <!-- ************************************ RULE CLASSES **************************************************************** -->
+    <!-- ******************************************************************************************************************** -->
+
+    <bean id="isKmartPRDropRule" class="com.shc.ecom.search.rules.IsKmartPRDropRule"/>
+    <bean id="contentDisplayEligibleRule" class="com.shc.ecom.search.rules.ContentDisplayEligibleRule"/>
+    <bean id="hierarchyExistenceRule" class="com.shc.ecom.search.rules.HierarchyExistenceRule"/>
+    <bean id="identityExistenceRule" class="com.shc.ecom.search.rules.IdentityExistenceRule"/>
+    <bean id="markForDeleteRule" class="com.shc.ecom.search.rules.MarkForDeleteRule"/>
+    <bean id="bundleSitesRule" class="com.shc.ecom.search.rules.BundleSitesRule"/>
+    <bean id="bundleHierarchyExistenceRule" class="com.shc.ecom.search.rules.BundleHierarchyExistenceRule"/>
+    <bean id="bundleMarkForDeleteRule" class="com.shc.ecom.search.rules.BundleMarkForDeleteRule"/>
+    <bean id="bundleDisplayEligibleRule" class="com.shc.ecom.search.rules.BundleDisplayEligibleRule"/>
+    <bean id="rankingRule" class="com.shc.ecom.search.rules.RankingRule"/>
+    <bean id="offerDisplayEligibleRule" class="com.shc.ecom.search.rules.OfferDisplayEligibleRule"/>
+    <bean id="offerTypeExistenceRule" class="com.shc.ecom.search.rules.OfferTypeExistenceRule"/>
+    <bean id="operationalSitesExistenceRule" class="com.shc.ecom.search.rules.OperationalSitesExistenceRule"/>
+    <bean id="searchSupressionRule" class="com.shc.ecom.search.rules.SearchSupressionRule"/>
+    <bean id="sitesExistenceRule" class="com.shc.ecom.search.rules.SitesExistenceRule"/>
+    <bean id="ssinExistenceRule" class="com.shc.ecom.search.rules.SsinExistenceRule"/>
+    <bean id="sywExclusiveRule" class="com.shc.ecom.search.rules.SywExclusiveRule"/>
+    <bean id="uidExistenceRule" class="com.shc.ecom.search.rules.UidExistenceRule"/>
+    <bean id="priceExistenceRule" class="com.shc.ecom.search.rules.PriceExistenceRule"/>
+    <bean id="retiredTaxonomyRule" class="com.shc.ecom.search.rules.RetiredTaxonomyRule"/>
+    <bean id="fitmentRule" class="com.shc.ecom.search.rules.FitmentRule"/>
+    <bean id="bundleFitmentRule" class="com.shc.ecom.search.rules.BundleFitmentRule"/>
+    <bean id="outOfStockOfferRule" class="com.shc.ecom.search.rules.OutOfStockOfferRule"/>
+    <bean id="offerMarketPlaceRule" class="com.shc.ecom.search.rules.OfferMarketPlaceRule"/>
+    <bean id="offerAutomotiveRule" class="com.shc.ecom.search.rules.OfferAutomotiveRule"/>
+    <bean id="productStoreEligibleRule" class="com.shc.ecom.search.rules.ProductStoreEligibleRule"/>
+    <bean id="siteEligRule" class="com.shc.ecom.search.rules.SiteEligRule"/>
+    <bean id="eligibleCatentrySubTypeRule" class="com.shc.ecom.search.rules.EligibleCatentrySubTypeRule"/>
+    <bean id="contentExistenceRule" class="com.shc.ecom.search.rules.ContentExistenceRule"/>
+    <bean id="offerEBayRule" class="com.shc.ecom.search.rules.OfferEBayRule"/>
+    
+
+    <!-- ******************************************************************************************************************** -->
+    <!-- ************************************ EXTRACT COMPONENT CLASSES ***************************************************** -->
+    <!-- ******************************************************************************************************************** -->
+
+    <bean id="storesExtractService"
+          class="com.shc.ecom.search.extract.components.store.StoresExtractService"/>
+    <bean id="prodstatsExtractComponent"
+          class="com.shc.ecom.search.extract.components.prodstats.ProdStatsExtractComponent"/>
+    <bean id="impressionExtractComponent"
+          class="com.shc.ecom.search.extract.components.impressions.ImpressionExtractComponent"/>
+    <bean id="offerExtractComponent" class="com.shc.ecom.search.extract.components.offer.OfferExtractComponent"/>
+    <bean id="auxiliaryOfferExtractComponent" class="com.shc.ecom.search.extract.components.offer.AuxiliaryOfferExtractComponent"/>
+    <bean id="inStorePriceExtractComponent"
+          class="com.shc.ecom.search.extract.components.pricing.InStorePriceExtractComponent"/>
+    <bean id="onlinePriceExtractComponent"
+          class="com.shc.ecom.search.extract.components.pricing.OnlinePriceExtractComponent"/>
+    <bean id="varAttrExtractComponent" class="com.shc.ecom.search.extract.components.varattr.VarAttrExtractComponent"/>
+
+    <bean id="contextMessage" class="com.shc.ecom.search.common.messages.ContextMessage"/>
+    <bean id="localAdExtractComponent" class="com.shc.ecom.search.extract.components.localad.LocalAdExtractComponent"/>
+
+    <!-- ******************************************************************************************************************** -->
+    <!-- ************************************ HELPER CLASSES **************************************************************** -->
+    <!-- ******************************************************************************************************************** -->
+
+    <!-- <bean id="kafkaPublishHelper" class="com.shc.ecom.search.extract.helper.KafkaPublishHelper"/> -->
+
+    <!-- ******************************************************************************************************************** -->
+    <!-- ************************************ Util CLASSES **************************************************************** -->
+    <!-- ******************************************************************************************************************** -->
+
+
+</beans>
