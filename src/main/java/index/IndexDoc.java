@@ -9,27 +9,41 @@ import org.springframework.stereotype.Component;
 import util.TransformJson;
 
 
+import java.io.FileInputStream;
+import java.io.IOError;
+import java.io.IOException;
+import java.io.InputStream;
 import java.lang.reflect.Field;
 
 @Component
 public class IndexDoc {
 
     public void sendToSolr() {
-        SearchDoc document = new TransformJson().getObjectFromJson();
-        SolrInputDocument solrInputDocument = convertToSolrInputDocument(document);
+       // SearchDoc document = new TransformJson().getObjectFromJson();
+        //SolrInputDocument solrInputDocument = convertToSolrInputDocument(document);
         System.out.println("Sending document to Solr Cloud");
+        SolrClient solr = new SolrServerInitializer().getSolrClient();
         try {
-            SolrClient solr = new SolrServerInitializer().getSolrClient();
-            UpdateResponse updateResponse = solr.add(solrInputDocument);
+            InputStream jsonInput = new FileInputStream("C:\\Users\\Test\\Desktop\\custom.json");
+
+            JSONUpdateRequest request = new JSONUpdateRequest(jsonInput);
+            request.setSplit("/exams");
+            request.addFieldMapping("first", "/first");
+            request.addFieldMapping("last", "/last");
+            request.addFieldMapping("grade", "/grade");
+            request.addFieldMapping("subject", "/exams/subject");
+            request.addFieldMapping("test", "/exams/test");
+            request.addFieldMapping("marks", "/exams/marks");
+
+            UpdateResponse updateResponse = request.process(solr);
+            // UpdateResponse updateResponse = solr.add(solrInputDocument);
             if (updateResponse.getStatus() == 0) {
                 System.out.println("Elapsed time in posting document to Solr: "+ updateResponse.getElapsedTime());
                 solr.commit();
             } else {
                 System.err.println("Failed to post documents to Solr. Response status: "+ updateResponse.getStatus());
             }
-        } catch (Exception e) {
-            System.out.println("Exception in " + Thread.currentThread().getName() + ". Unable to post to Solr."+ e);
-        }
+        } catch(Exception io){}
     }
 
     public static SolrInputDocument convertToSolrInputDocument(Object obj) {

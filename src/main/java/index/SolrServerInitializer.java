@@ -7,7 +7,7 @@ public class SolrServerInitializer {
     private SolrClient solrClient;
 
     public SolrClient getSolrClient() {
-        SolrClient solrClient = new HttpSolrClient("http://localhost:8983/solr/collection1");
+        SolrClient solrClient = new HttpSolrClient("http://localhost:8983/solr/collection2");
         this.solrClient = solrClient;
         return solrClient;
     }

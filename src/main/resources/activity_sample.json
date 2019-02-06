@@ -1,0 +1,59 @@
+{
+    "_id" : "5c4bcf0a8ff28723501c360c",
+    "serviceProviderId" : "5bd97b65f1aeeb3b6c97989c",
+    "serviceId" : "30",
+    "searchText" : "Boating\nAndalamala's Boating Program\nSky Diving. CA-1, Mill Valley, CA, USA. Dileep Scuba Diving program. Take a thrilling ride over, around, and under the water on this high-speed Chicken Boat adventure. Take a safety briefing, put on a life-vest and set off at full speed in a jet-style boat across the waters near Vila Olimpica. At a moment’s notice, the boat suddenly makes a 360-degree turn before intentionally dipping the tip of boat under water and soaking passengers. Thrilling high-speed boat tour with fast, 360-degree spins Agile boat that dips front-end underwater refreshing passengers Safety briefing and life-vests included Showers available after tour\n\nMichigan, USA\n",
+    "name" : "Andalamala's Boating Program",
+    "description" : "Sky Diving. CA-1, Mill Valley, CA, USA. Dileep Scuba Diving program. Take a thrilling ride over, around, and under the water on this high-speed Chicken Boat adventure. Take a safety briefing, put on a life-vest and set off at full speed in a jet-style boat across the waters near Vila Olimpica. At a moment’s notice, the boat suddenly makes a 360-degree turn before intentionally dipping the tip of boat under water and soaking passengers. Thrilling high-speed boat tour with fast, 360-degree spins Agile boat that dips front-end underwater refreshing passengers Safety briefing and life-vests included Showers available after tour\n",
+    "location" : "Michigan, USA",
+    "category" : "Boating",
+    "price" : "0",
+    "duration" : "2019-01-25T22:30:00.000Z",
+    "totalNoOfTickets" : 230,
+    "displayImages" : [ 
+    ],
+    "aboutImages" : [ 
+    ],
+    "contact" : "Dileep",
+    "ticketInfo" : [ 
+        {
+            "ticketCategory" : "Adult",
+            "price" : "350",
+            "totalPrice" : "0",
+            "fromAge" : 16,
+            "noOfTotalTickets" : 0,
+            "toAge" : 90
+        }
+    ],
+    "accessoryInfo" : [ 
+        {
+            "type" : "",
+            "description" : "",
+            "measurements" : [ 
+                {}
+            ]
+        }
+    ],
+    "additionalInfo" : {
+        "aboutInfo" : {
+            "about" : "Sky Diving. CA-1, Mill Valley, CA, USA. Dileep Scuba Diving program. Take a thrilling ride over, around, and under the water on this high-speed Chicken Boat adventure. Take a safety briefing, put on a life-vest and set off at full speed in a jet-style boat across the waters near Vila Olimpica. At a moment’s notice, the boat suddenly makes a 360-degree turn before intentionally dipping the tip of boat under water and soaking passengers. Thrilling high-speed boat tour with fast, 360-degree spins Agile boat that dips front-end underwater refreshing passengers Safety briefing and life-vests included Showers available after tour\n"
+        },
+        "highlightsInfo" : {
+            "highlights" : [ 
+                {
+                    "description" : "Boating. CA-1, Mill Valley, CA, USA. Dileep Scuba Diving program. Take a thrilling ride over, around, and under the water on this high-speed Chicken Boat adventure. Take a safety briefing, put on a life-vest and set off at full speed in a jet-style boat across the waters near Vila Olimpica. At a moment’s notice, the boat suddenly makes a 360-degree turn before intentionally dipping the tip of boat under water and soaking passengers. Thrilling high-speed boat tour with fast, 360-degree spins Agile boat that dips front-end underwater refreshing passengers Safety briefing and life-vests included Showers available after tour"
+                }, 
+                {
+                    "description" : "Boating. CA-1, Mill Valley, CA, USA. Dileep Scuba Diving program. Take a thrilling ride over, around, and under the water on this high-speed Chicken Boat adventure. Take a safety briefing, put on a life-vest and set off at full speed in a jet-style boat across the waters near Vila Olimpica. At a moment’s notice, the boat suddenly makes a 360-degree turn before intentionally dipping the tip of boat under water and soaking passengers. Thrilling high-speed boat tour with fast, 360-degree spins Agile boat that dips front-end underwater refreshing passengers Safety briefing and life-vests included Showers available after tour"
+                }, 
+                {
+                    "description" : "Boating. CA-1, Mill Valley, CA, USA. Dileep Scuba Diving program. Take a thrilling ride over, around, and under the water on this high-speed Chicken Boat adventure. Take a safety briefing, put on a life-vest and set off at full speed in a jet-style boat across the waters near Vila Olimpica. At a moment’s notice, the boat suddenly makes a 360-degree turn before intentionally dipping the tip of boat under water and soaking passengers. Thrilling high-speed boat tour with fast, 360-degree spins Agile boat that dips front-end underwater refreshing passengers Safety briefing and life-vests included Showers available after tour"
+                }
+            ]
+        },
+        "miscellaneous" : "Safety is main thing in our program"
+    },
+    "activityStartDate" : "2019-01-26T00:00:00.000Z",
+    "activityEndDate" : "2021-01-26T00:00:00.000Z",
+    "_class" : "com.adk.vazway.activity.model.Activity"
+}
