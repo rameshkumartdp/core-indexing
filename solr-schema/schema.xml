@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!-- Solr managed schema - automatically generated - DO NOT EDIT -->
 <schema name="example-data-driven-schema" version="1.6">
-    <uniqueKey>partnumber</uniqueKey>
+    <uniqueKey>id</uniqueKey>
     <fieldType name="ancestor_path" class="solr.TextField">
         <analyzer type="index">
             <tokenizer class="solr.KeywordTokenizerFactory"/>
@@ -446,43 +446,70 @@
     <field name="_version_" type="long" indexed="true" stored="false"/>
 
 
+    <!--FIELDS
+      <field name="id" type="string" indexed="true" stored="true" multiValued="false" omitNorms="true"/>
+      <field name="serviceProviderId" type="string" indexed="true" stored="true" multiValued="false" omitNorms="true"/>
+      <field name="serviceId" type="string" indexed="true" stored="true" omitNorms="true" default=""/>
+      <field name="searchText" type="string" indexed="true" stored="true" multiValued="false" omitNorms="true"/>
+      <field name="name" type="string" indexed="true" stored="true" multiValued="false" omitNorms="true" docValues="true"/>
+      <field name="description" type="string" indexed="true" stored="true" multiValued="false" omitNorms="true"/>
+      <field name="location" type="string" indexed="true" stored="true" multiValued="false" omitNorms="true" />
+      <field name="category" type="string" indexed="true" stored="true" multiValued="true" omitNorms="true" />
+      <field name="price" type="string" indexed="true" stored="true" multiValued="true" omitNorms="true" />
+      <field name="duration" type="string" indexed="true" stored="true" multiValued="false" omitNorms="true" />
+      <field name="totalNoOfTickets" type="string" indexed="true" stored="true" multiValued="false" omitNorms="true" />
+      <field name="displayImages" type="string" indexed="true" stored="true" multiValued="true" omitNorms="true" />
+      <field name="aboutImages" type="string" indexed="true" stored="true" multiValued="true" omitNorms="true"/>
+      <field name="contact" type="string" indexed="true" stored="true" multiValued="false" omitNorms="true"/>
+      <field name="ticketCategory" type="string" indexed="true" stored="true" multiValued="false" omitNorms="true" />
+      <field name="price" type="string" indexed="true" stored="true" multiValued="false" omitNorms="true" />
+      <field name="totalPrice" type="string" indexed="true" stored="true" multiValued="false" omitNorms="true" />
+      <field name="fromAge" type="string" indexed="true" stored="true" multiValued="false" omitNorms="true"/>
+      <field name="noOfTotalTickets" type="string" indexed="true" stored="true" multiValued="false" omitNorms="true"/>
+      <field name="toAge" type="string" indexed="true" stored="true" multiValued="false" omitNorms="true"/>
+      <field name="type" type="string" indexed="true" stored="true" multiValued="false" omitNorms="true"/>
+      <field name="description" type="string" indexed="true" stored="true" multiValued="false" omitNorms="true"/>
+      <field name="measurements" type="string" indexed="true" stored="true" multiValued="true" omitNorms="true"/>
+      <field name="about" type="string" indexed="true" stored="true" multiValued="false" omitNorms="true"/>
+      <field name="decsription" type="string" indexed="true" stored="true" multiValued="false" omitNorms="true"/>
+      <field name="miscellaneous" type="string" indexed="true" stored="true" multiValued="false" omitNorms="true"/>
+      <field name="activityStartDate" type="string" indexed="true" stored="true" multiValued="false" omitNorms="true"/>
+      <field name="activityEndDate" type="string" indexed="true" stored="true" multiValued="false" omitNorms="true"/>
+      <field name="first" type="string" indexed="true" stored="true" multiValued="false" omitNorms="true"/>
+      <field name="last" type="string" indexed="true" stored="true" multiValued="false" omitNorms="true"/>
+      <field name="grade" type="string" indexed="true" stored="true" multiValued="false" omitNorms="true"/>
+      <field name="subject" type="string" indexed="true" stored="true" multiValued="false" omitNorms="true"/>
+      <field name="test" type="string" indexed="true" stored="true" multiValued="false" omitNorms="true"/>
+      <field name="marks" type="string" indexed="true" stored="true" multiValued="false" omitNorms="true"/>
+      <field name="_class" type="string" indexed="true" stored="true" multiValued="false" omitNorms="true"/>
     <!--FIELDS-->
-    <field name="_id" type="string" indexed="true" stored="true" multiValued="false" omitNorms="true"/>
+
+
+    <field name="id" type="string" indexed="true" stored="true" multiValued="false" omitNorms="true"/>
     <field name="serviceProviderId" type="string" indexed="true" stored="true" multiValued="false" omitNorms="true"/>
     <field name="serviceId" type="string" indexed="true" stored="true" omitNorms="true" default=""/>
     <field name="searchText" type="string" indexed="true" stored="true" multiValued="false" omitNorms="true"/>
-    <field name="name" type="nameSearch" indexed="true" stored="true" multiValued="false" omitNorms="true" docValues="true"/>
+    <field name="name" type="string" indexed="true" stored="true" multiValued="false" omitNorms="true" docValues="true"/>
     <field name="description" type="string" indexed="true" stored="true" multiValued="false" omitNorms="true"/>
     <field name="location" type="string" indexed="true" stored="true" multiValued="false" omitNorms="true" />
-    <field name="category" type="string" indexed="true" stored="true" multiValued="true" omitNorms="true" />
-    <field name="price" type="string" indexed="true" stored="true" multiValued="true" omitNorms="true" />
-    <field name="duration" type="string" indexed="true" stored="true" multiValued="false" omitNorms="true" />
-    <field name="totalNoOfTickets" type="string" indexed="true" stored="true" multiValued="false" omitNorms="true" />
-    <field name="displayImages" type="string" indexed="true" stored="true" multiValued="true" omitNorms="true" />
-    <field name="aboutImages" type="string" indexed="true" stored="true" multiValued="true" omitNorms="true"/>
-    <field name="contact" type="string" indexed="true" stored="true" multiValued="false" omitNorms="true"/>
-    <field name="ticketCategory" type="string" indexed="true" stored="true" multiValued="false" omitNorms="true" />
+    <field name="category" type="string" indexed="true" stored="true" multiValued="false" omitNorms="true" />
     <field name="price" type="string" indexed="true" stored="true" multiValued="false" omitNorms="true" />
-    <field name="totalPrice" type="string" indexed="true" stored="true" multiValued="false" omitNorms="true" />
-    <field name="fromAge" type="string" indexed="true" stored="true" multiValued="false" omitNorms="true"/>
-    <field name="noOfTotalTickets" type="string" indexed="true" stored="true" multiValued="false" omitNorms="true"/>
-    <field name="toAge" type="string" indexed="true" stored="true" multiValued="false" omitNorms="true"/>
-    <field name="type" type="string" indexed="true" stored="true" multiValued="false" omitNorms="true"/>
-    <field name="description" type="string" indexed="true" stored="true" multiValued="false" omitNorms="true"/>
-    <field name="measurements" type="string" indexed="true" stored="true" multiValued="true" omitNorms="true"/>
-    <field name="about" type="string" indexed="true" stored="true" multiValued="false" omitNorms="true"/>
-    <field name="decsription" type="string" indexed="true" stored="true" multiValued="false" omitNorms="true"/>
-    <field name="miscellaneous" type="string" indexed="true" stored="true" multiValued="false" omitNorms="true"/>
+    <field name="duration" type="string" indexed="true" stored="true" multiValued="false" omitNorms="true" />
+    <field name="totalNoOfTickets" type="int" indexed="true" stored="true" multiValued="false" omitNorms="true" />
+    <field name="itemnumber" type="string" indexed="true" stored="true" multiValued="false" omitNorms="true" />
+    <field name="contact" type="string" indexed="true" stored="true" multiValued="false" omitNorms="true"/>
     <field name="activityStartDate" type="string" indexed="true" stored="true" multiValued="false" omitNorms="true"/>
     <field name="activityEndDate" type="string" indexed="true" stored="true" multiValued="false" omitNorms="true"/>
-    <field name="first" type="string" indexed="true" stored="true" multiValued="false" omitNorms="true"/>
-    <field name="last" type="string" indexed="true" stored="true" multiValued="false" omitNorms="true"/>
-    <field name="grade" type="string" indexed="true" stored="true" multiValued="false" omitNorms="true"/>
-    <field name="subject" type="string" indexed="true" stored="true" multiValued="false" omitNorms="true"/>
-    <field name="test" type="string" indexed="true" stored="true" multiValued="false" omitNorms="true"/>
-    <field name="marks" type="string" indexed="true" stored="true" multiValued="false" omitNorms="true"/>
+    <field name="displayImages" type="string" indexed="true" stored="true" multiValued="false" omitNorms="true" />
+    <field name="aboutImages" type="string" indexed="true" stored="true" multiValued="false" omitNorms="true"/>
+    <field name="childTicketInfo" type="string" indexed="true" stored="true" multiValued="true" omitNorms="true"/>
+    <field name="accessoryType" type="string" indexed="true" stored="true" multiValued="false" omitNorms="true"/>
+    <field name="accessoryDescription" type="string" indexed="true" stored="true" multiValued="false" omitNorms="true"/>
+    <field name="accessoryMeasurements" type="string" indexed="true" stored="true" multiValued="false" omitNorms="true"/>
+    <field name="aboutInfo" type="string" indexed="true" stored="true" multiValued="false" omitNorms="true"/>
+    <field name="highlightsInfo" type="string" indexed="true" stored="true" multiValued="true" omitNorms="true"/>
+    <field name="miscellaneous" type="string" indexed="true" stored="true" multiValued="false" omitNorms="true"/>
     <field name="_class" type="string" indexed="true" stored="true" multiValued="false" omitNorms="true"/>
-    <!--FIELDS-->
 
 
 
@@ -561,5 +588,4 @@
     <dynamicField name="*_p" type="location" indexed="true" stored="true"/>
     <dynamicField name="*_c" type="currency" indexed="true" stored="true"/>
     <copyField source="*" dest="_text_"/>
-    <copyField source="name" dest="nameAutoComplete"/>
 </schema>
