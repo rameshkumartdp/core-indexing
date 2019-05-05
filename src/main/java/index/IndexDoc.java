@@ -1,16 +1,18 @@
 package index;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import docbuilder.Highlights;
 import docbuilder.SearchDoc;
 import docbuilder.TicketDetails;
-import org.apache.http.protocol.HTTP;
 import org.apache.solr.client.solrj.SolrClient;
 import org.apache.solr.client.solrj.response.UpdateResponse;
 import org.apache.solr.common.SolrInputDocument;
 import org.springframework.stereotype.Component;
-import java.io.*;
+
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.InputStream;
 import java.lang.reflect.Field;
-import java.net.URL;
 import java.text.SimpleDateFormat;
 import java.util.*;
 
@@ -65,6 +67,13 @@ public class IndexDoc {
                             document.setAdultTicketInfo(list);
                         }
                     }
+                    List<String> highlightDesc = new ArrayList<>();
+                    List<Highlights> highlights = document.getAdditionalInfo().getHighlightsInfo().getHighlights();
+                    Iterator<Highlights> hItr = highlights.iterator();
+                    while(hItr.hasNext()) {
+                        highlightDesc.add("description:"+hItr.next().getDescription());
+                    }
+                   document.setAccessoryInfos(highlightDesc);
                 }
                 searchDocList.add(document);
             }

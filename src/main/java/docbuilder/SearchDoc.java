@@ -90,6 +90,9 @@ public class SearchDoc {
     private  String aboutInfo = "";
 
     @Field
+    private  List<String> highlights = new ArrayList<>();
+
+    @Field
     private  List<String> highlightsInfo = new ArrayList<>();
 
     @Field
@@ -348,5 +351,13 @@ public class SearchDoc {
 
     public void setAccessoryInfos(List<String> accessoryInfos) {
         this.accessoryInfos = accessoryInfos;
+    }
+
+    public List<String> getHighlights() {
+        return highlights;
+    }
+
+    public void setHighlights(List<String> highlights) {
+        this.highlights = highlights;
     }
 }

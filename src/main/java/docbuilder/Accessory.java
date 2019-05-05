@@ -2,8 +2,6 @@ package docbuilder;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
-import java.util.List;
-
 /**
  * Created by rames on 05-05-2019.
  */

@@ -1,13 +1,10 @@
 package docbuilder;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
-
 /**
  * Created by rames on 05-05-2019.
  */
 public class AdditionalInfo {
     private AboutInfo aboutInfo;
-    @JsonIgnore
     private HighlightsInfo highlightsInfo;
     private String miscellaneous;
 
