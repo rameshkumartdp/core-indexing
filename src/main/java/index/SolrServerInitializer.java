@@ -11,14 +11,14 @@ public enum SolrServerInitializer {
 
     SolrServerInitializer() {
 
-        /*CloudSolrClient cloudSolrClient = new CloudSolrClient.Builder()
-                .withZkHost("")
+       /* CloudSolrClient cloudSolrClient = new CloudSolrClient.Builder()
+                .withZkHost("ec2-18-222-165-251.us-east-2.compute.amazonaws.com:2181/solr")
                 .build();
-        cloudSolrClient.setDefaultCollection("");
+        cloudSolrClient.setDefaultCollection("activity");
         cloudSolrClient.setZkConnectTimeout(100);
         solrClient = cloudSolrClient;*/
 
-        solrClient = new HttpSolrClient("http://localhost:8983/solr/collection2");
+        solrClient = new HttpSolrClient("http://ec2-18-222-165-251.us-east-2.compute.amazonaws.com:8983/solr/activity");
     }
 
     public SolrClient getSolrClient() {
