@@ -22,21 +22,12 @@ public class IndexDoc {
     public void sendToSolr() {
         System.out.println("Sending document to Solr Cloud");
         try {
-            /*RestTemplate restTemplate = new RestTemplate();
-            HttpHeaders headers = new HttpHeaders();
-            //headers.setAccept(Collections.singletonList(MediaType.APPLICATION_JSON));
-            //headers.setContentType(MediaType.TEXT_PLAIN);
-            headers.setContentType(new MediaType("application","json"));*/
-             /*HttpEntity<String> entity = new HttpEntity<>(requestJson.toString(), headers);
-            restTemplate.exchange("http://localhost:8983/solr/collection3/update/json/docs?split=/&f=*//**&commit=true", HttpMethod.POST, entity, String.class);
-             */
             String indexTime = new SimpleDateFormat("yyyy_MM_dd_HHmmSSS").format(new Date());
             SearchDoc document = null;
             List<SearchDoc> searchDocList = new ArrayList<>();
             File folder = new File("/home/ec2-user/jsonFilesToIndex/");
             //File folder = new File("C:\\Users\\rames\\Desktop\\FIle");
             File[] listOfFiles = folder.listFiles();
-
             for (File file : listOfFiles) {
                 if (file.isFile() && file.getName().endsWith(".json")) {
                     ObjectMapper mapper = new ObjectMapper();
@@ -93,13 +84,11 @@ public class IndexDoc {
     }
 
     public static List<SolrInputDocument> convertToSolrInputDocuments(Collection<?> docs) {
-
         List<SolrInputDocument> solrInputDocuments = new ArrayList<>();
         for (Object doc : docs) {
             SolrInputDocument solrInputDocument = convertToSolrInputDocument(doc);
             solrInputDocuments.add(solrInputDocument);
         }
-
         return solrInputDocuments;
     }
 
@@ -117,13 +106,11 @@ public class IndexDoc {
     }
 
     private static String getFieldName(Field f) {
-
         org.apache.solr.client.solrj.beans.Field field = f.getAnnotation(org.apache.solr.client.solrj.beans.Field.class);
         if (field != null && !"#default".equals(field.value())) {
             return field.value();
         } else {
             return f.getName();
         }
-
     }
 }
