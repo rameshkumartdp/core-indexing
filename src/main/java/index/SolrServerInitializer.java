@@ -19,6 +19,7 @@ public enum SolrServerInitializer {
         solrClient = cloudSolrClient;*/
 
         solrClient = new HttpSolrClient("http://ec2-18-222-165-251.us-east-2.compute.amazonaws.com:8983/solr/activity");
+        //solrClient = new HttpSolrClient("http://localhost:8983/solr/collection2");
     }
 
     public SolrClient getSolrClient() {

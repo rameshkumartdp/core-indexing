@@ -32,6 +32,7 @@ public class IndexDoc {
             SearchDoc document = null;
             List<SearchDoc> searchDocList = new ArrayList<>();
             File folder = new File("/home/ec2-user/jsonFilesToIndex/");
+            //File folder = new File("C:\\Users\\rames\\Desktop\\FIle");
             File[] listOfFiles = folder.listFiles();
 
             for (File file : listOfFiles) {
@@ -39,6 +40,7 @@ public class IndexDoc {
                     ObjectMapper mapper = new ObjectMapper();
                     InputStream is = new FileInputStream(folder+"/"+file.getName());
                     document = mapper.readValue(is, SearchDoc.class);
+                    document.setName(document.getName().toLowerCase());
                     document.setIndexTime(indexTime);
                     document.setAboutInfo(document.getAdditionalInfo().getAboutInfo().getAbout());
                     document.setMiscellaneous(document.getAdditionalInfo().getMiscellaneous());
