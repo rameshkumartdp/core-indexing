@@ -1,10 +1,8 @@
 package index;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.mongodb.MongoClient;
-import com.mongodb.client.MongoCollection;
 import com.mongodb.client.MongoCursor;
-import com.mongodb.client.MongoDatabase;
+import db.SpringMongoClient;
 import docbuilder.Highlights;
 import docbuilder.SearchDoc;
 import docbuilder.TicketDetails;
@@ -22,17 +20,14 @@ import java.util.*;
 public class IndexDoc {
 
     public void sendToSolr() {
-        MongoClient mongoClient = new MongoClient("localhost", 27017);
-        MongoDatabase database = mongoClient.getDatabase("aktway");
-        MongoCollection<Document> col = database.getCollection("activity");
         String indexTime = new SimpleDateFormat("yyyy_MM_dd_HHmmSSS").format(new Date());
         List<SearchDoc> searchDocList = new ArrayList<>();
-        try(MongoCursor<Document> cur = col.find().iterator()) {
-            while (cur.hasNext()) {
-                Document doc = cur.next();
-                SearchDoc document = transformDoc(doc, indexTime);
-                searchDocList.add(document);
-            }
+        MongoCursor<Document> cursor = SpringMongoClient.INSTANCE.getMongoCursor();
+
+        while (cursor.hasNext()) {
+            Document doc = cursor.next();
+            SearchDoc document = transformDoc(doc, indexTime);
+            searchDocList.add(document);
         }
         postToSolr(searchDocList);
     }

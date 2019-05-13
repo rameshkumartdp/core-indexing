@@ -3,23 +3,29 @@ package db;
 /**
  * Created by rames on 13-05-2019.
  */
-import com.mongodb.Mongo;
+
 import com.mongodb.MongoClient;
-import org.springframework.data.mongodb.config.AbstractMongoConfiguration;
+import com.mongodb.client.MongoCollection;
+import com.mongodb.client.MongoCursor;
+import com.mongodb.client.MongoDatabase;
+import org.bson.Document;
 
-import java.net.UnknownHostException;
+public enum SpringMongoClient {
 
-public class SpringMongoClient  extends AbstractMongoConfiguration {
-    MongoClient client;
-    @Override
-    public String getDatabaseName() {
-        return "aktway";
+    INSTANCE;
+    private MongoCursor<Document> cursor;
+
+     SpringMongoClient() {
+         MongoClient mongoClient = new MongoClient("localhost", 27017);
+         MongoDatabase database = mongoClient.getDatabase("aktway");
+         MongoCollection<Document> col = database.getCollection("activity");
+         cursor = col.find().iterator();
     }
 
-   public Mongo mongo() throws UnknownHostException {
-       client = new MongoClient("localhost");
-       return client;
+    public MongoCursor<Document> getMongoCursor() {
+        return cursor;
     }
+
 }
 
 
