@@ -1,85 +1,101 @@
 package index;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.mongodb.MongoClient;
+import com.mongodb.client.MongoCollection;
+import com.mongodb.client.MongoCursor;
+import com.mongodb.client.MongoDatabase;
 import docbuilder.Highlights;
 import docbuilder.SearchDoc;
 import docbuilder.TicketDetails;
 import org.apache.solr.client.solrj.SolrClient;
+import org.apache.solr.client.solrj.SolrServerException;
 import org.apache.solr.client.solrj.response.UpdateResponse;
 import org.apache.solr.common.SolrInputDocument;
-import org.springframework.stereotype.Component;
+import org.bson.Document;
 
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.InputStream;
+import java.io.IOException;
 import java.lang.reflect.Field;
 import java.text.SimpleDateFormat;
 import java.util.*;
 
-@Component
 public class IndexDoc {
 
     public void sendToSolr() {
-        System.out.println("Sending document to Solr Cloud");
-        try {
-            String indexTime = new SimpleDateFormat("yyyy_MM_dd_HHmmSSS").format(new Date());
-            SearchDoc document = null;
-            List<SearchDoc> searchDocList = new ArrayList<>();
-            File folder = new File("/home/ec2-user/jsonFilesToIndex/");
-            //File folder = new File("C:\\Users\\rames\\Desktop\\FIle");
-            File[] listOfFiles = folder.listFiles();
-            for (File file : listOfFiles) {
-                if (file.isFile() && file.getName().endsWith(".json")) {
-                    ObjectMapper mapper = new ObjectMapper();
-                    InputStream is = new FileInputStream(folder+"/"+file.getName());
-                    document = mapper.readValue(is, SearchDoc.class);
-                    document.setName(document.getName().toLowerCase());
-                    document.setIndexTime(indexTime);
-                    document.setAboutInfo(document.getAdditionalInfo().getAboutInfo().getAbout());
-                    document.setMiscellaneous(document.getAdditionalInfo().getMiscellaneous());
-                    List<String> accList = new ArrayList<>();
-                    accList.add("type:"+document.getAccessoryInfo().get(0).getType());
-                    accList.add("description:"+document.getAccessoryInfo().get(0).getDescription());
-                    document.setAccessoryInfos(accList);
-                    List<TicketDetails> ticketList = document.getTicketInfo();
-                    Iterator<TicketDetails> itr = ticketList.iterator();
-                    while(itr.hasNext()) {
-                        TicketDetails details = itr.next();
-                        List<String> list = new ArrayList<>();
-                        list.add("ticketCategory:"+details.getTicketCategory());
-                        list.add("price:"+details.getPrice());
-                        list.add("totalPrice:"+details.getTotalPrice());
-                        list.add("fromAge:"+details.getFromAge());
-                        list.add("noOfTotalTickets:"+details.getNoOfTotalTickets());
-                        list.add("toAge:"+details.getToAge());
-                        if(details.getTicketCategory().equals("Adult")) {
-                            document.setChildTicketInfo(list);
-                        } else {
-                            document.setAdultTicketInfo(list);
-                        }
-                    }
-                    List<String> highlightDesc = new ArrayList<>();
-                    List<Highlights> highlights = document.getAdditionalInfo().getHighlightsInfo().getHighlights();
-                    Iterator<Highlights> hItr = highlights.iterator();
-                    while(hItr.hasNext()) {
-                        highlightDesc.add("description:"+hItr.next().getDescription());
-                    }
-                   document.setAccessoryInfos(highlightDesc);
-                }
+        MongoClient mongoClient = new MongoClient("localhost", 27017);
+        MongoDatabase database = mongoClient.getDatabase("aktway");
+        MongoCollection<Document> col = database.getCollection("activity");
+        String indexTime = new SimpleDateFormat("yyyy_MM_dd_HHmmSSS").format(new Date());
+        List<SearchDoc> searchDocList = new ArrayList<>();
+        try(MongoCursor<Document> cur = col.find().iterator()) {
+            while (cur.hasNext()) {
+                Document doc = cur.next();
+                SearchDoc document = transformDoc(doc, indexTime);
                 searchDocList.add(document);
             }
-            List<SolrInputDocument> solrInputDocuments = convertToSolrInputDocuments(searchDocList);
+        }
+        postToSolr(searchDocList);
+    }
 
-            SolrClient solr = SolrServerInitializer.INSTANCE.getSolrClient();
+    public SearchDoc transformDoc(Document doc, String indexTime) {
+        String json = com.mongodb.util.JSON.serialize(doc);
+        System.out.println("JSON serialized Document: " + json);
+        SearchDoc document = null;
+        ObjectMapper mapper1 = new ObjectMapper();
+        try {
+            document = mapper1.readValue(json, SearchDoc.class);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        document.setName(document.getName().toLowerCase());
+        document.setIndexTime(indexTime);
+        document.setAboutInfo(document.getAdditionalInfo().getAboutInfo().getAbout());
+        document.setMiscellaneous(document.getAdditionalInfo().getMiscellaneous());
+        List<String> accList = new ArrayList<>();
+        accList.add("type:"+document.getAccessoryInfo().get(0).getType());
+        accList.add("description:"+document.getAccessoryInfo().get(0).getDescription());
+        document.setAccessoryInfos(accList);
+        List<TicketDetails> ticketList = document.getTicketInfo();
+        Iterator<TicketDetails> itr = ticketList.iterator();
+        while(itr.hasNext()) {
+            TicketDetails details = itr.next();
+            List<String> list = new ArrayList<>();
+            list.add("ticketCategory:"+details.getTicketCategory());
+            list.add("price:"+details.getPrice());
+            list.add("totalPrice:"+details.getTotalPrice());
+            list.add("fromAge:"+details.getFromAge());
+            list.add("noOfTotalTickets:"+details.getNoOfTotalTickets());
+            list.add("toAge:"+details.getToAge());
+            if(details.getTicketCategory().equals("Adult")) {
+                document.setChildTicketInfo(list);
+            } else {
+                document.setAdultTicketInfo(list);
+            }
+        }
+        List<String> highlightDesc = new ArrayList<>();
+        List<Highlights> highlights = document.getAdditionalInfo().getHighlightsInfo().getHighlights();
+        Iterator<Highlights> hItr = highlights.iterator();
+        while(hItr.hasNext()) {
+            highlightDesc.add("description:"+hItr.next().getDescription());
+        }
+        document.setAccessoryInfos(highlightDesc);
+        return document;
+    }
+
+    public void postToSolr(List<SearchDoc> searchDocList) {
+        System.out.println("Sending documents to Solr Cloud");
+        List<SolrInputDocument> solrInputDocuments = convertToSolrInputDocuments(new ArrayList<>(searchDocList));
+        SolrClient solr = SolrServerInitializer.INSTANCE.getSolrClient();
+        try {
             UpdateResponse updateResponse = solr.add(solrInputDocuments);
             if (updateResponse.getStatus() == 0) {
-                System.out.println("Elapsed time in posting "+solrInputDocuments.size()+" documents to Solr: "+ updateResponse.getElapsedTime());
+                System.out.println("Elapsed time in posting " + solrInputDocuments.size() + " documents to Solr: " + updateResponse.getElapsedTime());
                 solr.commit();
             } else {
-                System.err.println("Failed to post "+solrInputDocuments.size()+" documents to Solr. Response status: "+ updateResponse.getStatus());
+                System.err.println("Failed to post " + solrInputDocuments.size() + " documents to Solr. Response status: " + updateResponse.getStatus());
             }
-        } catch(Exception e){
-            e.printStackTrace();
+        } catch(IOException ie) {
+        } catch (SolrServerException sse) {
         }
     }
 
