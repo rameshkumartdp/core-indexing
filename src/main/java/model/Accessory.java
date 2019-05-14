@@ -1,4 +1,4 @@
-package docbuilder;
+package model;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 

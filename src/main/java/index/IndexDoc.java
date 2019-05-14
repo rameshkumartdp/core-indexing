@@ -3,14 +3,16 @@ package index;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.mongodb.client.MongoCursor;
 import db.SpringMongoClient;
-import docbuilder.Highlights;
+import model.Highlights;
 import docbuilder.SearchDoc;
-import docbuilder.TicketDetails;
+import model.TicketDetails;
 import org.apache.solr.client.solrj.SolrClient;
 import org.apache.solr.client.solrj.SolrServerException;
+import org.apache.solr.client.solrj.request.UpdateRequest;
 import org.apache.solr.client.solrj.response.UpdateResponse;
 import org.apache.solr.common.SolrInputDocument;
 import org.bson.Document;
+import solr.SolrServerInitializer;
 
 import java.io.IOException;
 import java.lang.reflect.Field;
@@ -81,8 +83,13 @@ public class IndexDoc {
         System.out.println("Sending documents to Solr Cloud");
         List<SolrInputDocument> solrInputDocuments = convertToSolrInputDocuments(new ArrayList<>(searchDocList));
         SolrClient solr = SolrServerInitializer.INSTANCE.getSolrClient();
+        UpdateRequest req = new UpdateRequest();
+        req.setAction(UpdateRequest.ACTION.COMMIT, false, false);
+        req.add(solrInputDocuments);
+
         try {
-            UpdateResponse updateResponse = solr.add(solrInputDocuments);
+            //UpdateResponse updateResponse = solr.add(solrInputDocuments);
+            UpdateResponse updateResponse = req.process(solr);
             if (updateResponse.getStatus() == 0) {
                 System.out.println("Elapsed time in posting " + solrInputDocuments.size() + " documents to Solr: " + updateResponse.getElapsedTime());
                 solr.commit();

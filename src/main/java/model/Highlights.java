@@ -1,4 +1,4 @@
-package docbuilder;
+package model;
 
 /**
  * Created by rames on 05-05-2019.

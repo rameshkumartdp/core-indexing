@@ -1,6 +1,9 @@
 package docbuilder;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import model.Accessory;
+import model.AdditionalInfo;
+import model.TicketDetails;
 import org.apache.solr.client.solrj.beans.Field;
 
 import java.util.ArrayList;
@@ -75,7 +78,7 @@ public class SearchDoc {
     @Field
     private List<String> accessoryInfos;
 
-    private  AdditionalInfo additionalInfo;
+    private AdditionalInfo additionalInfo;
 
     @Field
     private  String accessoryType = "";

@@ -1,4 +1,4 @@
-package docbuilder;
+package model;
 
 import java.util.List;
 
