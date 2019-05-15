@@ -5,7 +5,6 @@ package com.adk.aktway.search.db;
  */
 
 import com.adk.aktway.search.config.GlobalConstants;
-import com.adk.aktway.search.config.PropertiesLoader;
 import com.mongodb.MongoClient;
 import com.mongodb.client.MongoCollection;
 import com.mongodb.client.MongoCursor;
@@ -18,9 +17,9 @@ public enum SpringMongoClient {
     private MongoCursor<Document> cursor;
 
      SpringMongoClient() {
-         MongoClient mongoClient = new MongoClient(PropertiesLoader.getProperty(GlobalConstants.MONGO_HOST), Integer.parseInt(PropertiesLoader.getProperty(GlobalConstants.MONGO_PORT)));
-         MongoDatabase database = mongoClient.getDatabase(PropertiesLoader.getProperty(GlobalConstants.MONGO_DB));
-         MongoCollection<Document> col = database.getCollection(PropertiesLoader.getProperty(GlobalConstants.MONGO_COLLECTION));
+         MongoClient mongoClient = new MongoClient(GlobalConstants.MONGO_HOST, Integer.parseInt(GlobalConstants.MONGO_PORT));
+         MongoDatabase database = mongoClient.getDatabase(GlobalConstants.MONGO_DB);
+         MongoCollection<Document> col = database.getCollection(GlobalConstants.MONGO_COLLECTION);
          cursor = col.find().iterator();
     }
 

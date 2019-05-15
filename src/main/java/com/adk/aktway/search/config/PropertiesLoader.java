@@ -38,9 +38,7 @@ public class PropertiesLoader {
                     var11.printStackTrace();
                 }
             }
-
         }
-
     }
 
     public static String getProperty(String key) {
