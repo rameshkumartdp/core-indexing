@@ -1,4 +1,4 @@
-package model;
+package com.adk.aktway.search.model;
 
 import java.util.List;
 

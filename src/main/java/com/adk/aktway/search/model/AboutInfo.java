@@ -1,4 +1,4 @@
-package model;
+package com.adk.aktway.search.model;
 
 /**
  * Created by rames on 05-05-2019.

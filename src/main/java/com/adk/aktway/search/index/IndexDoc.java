@@ -1,18 +1,19 @@
-package index;
+package com.adk.aktway.search.index;
 
+import com.adk.aktway.search.config.GlobalConstants;
+import com.adk.aktway.search.db.SpringMongoClient;
+import com.adk.aktway.search.docbuilder.SearchDoc;
+import com.adk.aktway.search.model.Highlights;
+import com.adk.aktway.search.model.TicketDetails;
+import com.adk.aktway.search.solr.SolrServerInitializer;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.mongodb.client.MongoCursor;
-import db.SpringMongoClient;
-import model.Highlights;
-import docbuilder.SearchDoc;
-import model.TicketDetails;
 import org.apache.solr.client.solrj.SolrClient;
 import org.apache.solr.client.solrj.SolrServerException;
 import org.apache.solr.client.solrj.request.UpdateRequest;
 import org.apache.solr.client.solrj.response.UpdateResponse;
 import org.apache.solr.common.SolrInputDocument;
 import org.bson.Document;
-import solr.SolrServerInitializer;
 
 import java.io.IOException;
 import java.lang.reflect.Field;
@@ -22,7 +23,7 @@ import java.util.*;
 public class IndexDoc {
 
     public void sendToSolr() {
-        String indexTime = new SimpleDateFormat("yyyy_MM_dd_HHmmSSS").format(new Date());
+        String indexTime = new SimpleDateFormat(GlobalConstants.INDEX_TIME_FORMAT).format(new Date());
         List<SearchDoc> searchDocList = new ArrayList<>();
         MongoCursor<Document> cursor = SpringMongoClient.INSTANCE.getMongoCursor();
 

@@ -1,9 +1,9 @@
-package docbuilder;
+package com.adk.aktway.search.docbuilder;
 
+import com.adk.aktway.search.model.Accessory;
+import com.adk.aktway.search.model.AdditionalInfo;
+import com.adk.aktway.search.model.TicketDetails;
 import com.fasterxml.jackson.annotation.JsonIgnore;
-import model.Accessory;
-import model.AdditionalInfo;
-import model.TicketDetails;
 import org.apache.solr.client.solrj.beans.Field;
 
 import java.util.ArrayList;

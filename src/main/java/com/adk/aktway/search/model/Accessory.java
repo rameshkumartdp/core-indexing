@@ -1,4 +1,4 @@
-package model;
+package com.adk.aktway.search.model;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
