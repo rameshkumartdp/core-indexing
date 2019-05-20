@@ -1,10 +1,12 @@
 package com.adk.aktway.search.docbuilder;
 
 import com.adk.aktway.search.model.Accessory;
+import com.adk.aktway.search.model.AccessoryDetailEntries;
 import com.adk.aktway.search.model.AdditionalInfo;
 import com.adk.aktway.search.model.TicketDetails;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import org.apache.solr.client.solrj.beans.Field;
+import org.bson.BSONObject;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -39,30 +41,18 @@ public class SearchDoc {
     private String price;
 
     @Field
-    private String duration;
-
-    @Field
-    private int totalNoOfTickets;
-
-    @Field
-    private String itemnumber = "";
+    private List<String> highlightsImages;
 
     @Field
     private String contact;
 
     @Field
-    private String activityStartDate;
-
-    @Field
-    private String activityEndDate;
+    @JsonIgnore
+    private List<AccessoryDetailEntries> accessoryDetail = new ArrayList<>();
 
     @Field
     @JsonIgnore
-    private String displayImages = "";
-
-    @Field
-    @JsonIgnore
-    private  String aboutImages = "";
+    private List<String> bookingDetail = new ArrayList<>();
 
     private  List<TicketDetails> ticketInfo = new ArrayList<>();
 
@@ -73,21 +63,21 @@ public class SearchDoc {
     @JsonIgnore
     private  List<String> childTicketInfo ;
 
-    private  List<Accessory> accessoryInfo  = new ArrayList<>();
+    @Field
+    @JsonIgnore
+    private  List<String> infantTicketInfo ;
 
     @Field
-    private List<String> accessoryInfos;
+    private  String activityStartDate ;
+
+    @Field
+    private  String activityEndDate ;
+
+    @Field
+    @JsonIgnore
+    private  List<String> seniorCitizenTicketInfo ;
 
     private AdditionalInfo additionalInfo;
-
-    @Field
-    private  String accessoryType = "";
-
-    @Field
-    private  String accessoryDescription = "";
-
-    @Field
-    private  String accessoryMeasurements = "";
 
     @Field
     private  String aboutInfo = "";
@@ -100,9 +90,6 @@ public class SearchDoc {
 
     @Field
     private  String _class;
-
-    @Field
-    private  String miscellaneous = "";
 
     @Field
     private  String indexTime = "";
@@ -179,30 +166,6 @@ public class SearchDoc {
         this.price = price;
     }
 
-    public String getDuration() {
-        return duration;
-    }
-
-    public void setDuration(String duration) {
-        this.duration = duration;
-    }
-
-    public int getTotalNoOfTickets() {
-        return totalNoOfTickets;
-    }
-
-    public void setTotalNoOfTickets(int totalNoOfTickets) {
-        this.totalNoOfTickets = totalNoOfTickets;
-    }
-
-    public String getItemnumber() {
-        return itemnumber;
-    }
-
-    public void setItemnumber(String itemnumber) {
-        this.itemnumber = itemnumber;
-    }
-
     public String getContact() {
         return contact;
     }
@@ -211,69 +174,12 @@ public class SearchDoc {
         this.contact = contact;
     }
 
-    public String getActivityStartDate() {
-        return activityStartDate;
-    }
-
-    public void setActivityStartDate(String activityStartDate) {
-        this.activityStartDate = activityStartDate;
-    }
-
-    public String getActivityEndDate() {
-        return activityEndDate;
-    }
-
-    public void setActivityEndDate(String activityEndDate) {
-        this.activityEndDate = activityEndDate;
-    }
-
-    public String getDisplayImages() {
-        return displayImages;
-    }
-
-    public void setDisplayImages(String displayImages) {
-        this.displayImages = displayImages;
-    }
-
-    public String getAboutImages() {
-        return aboutImages;
-    }
-
-    public void setAboutImages(String aboutImages) {
-        this.aboutImages = aboutImages;
-    }
-
     public List<TicketDetails> getTicketInfo() {
         return ticketInfo;
     }
 
     public void setTicketInfo(List<TicketDetails> ticketInfo) {
         this.ticketInfo = ticketInfo;
-    }
-
-
-    public String getAccessoryType() {
-        return accessoryType;
-    }
-
-    public void setAccessoryType(String accessoryType) {
-        this.accessoryType = accessoryType;
-    }
-
-    public String getAccessoryDescription() {
-        return accessoryDescription;
-    }
-
-    public void setAccessoryDescription(String accessoryDescription) {
-        this.accessoryDescription = accessoryDescription;
-    }
-
-    public String getAccessoryMeasurements() {
-        return accessoryMeasurements;
-    }
-
-    public void setAccessoryMeasurements(String accessoryMeasurements) {
-        this.accessoryMeasurements = accessoryMeasurements;
     }
 
     public String getAboutInfo() {
@@ -290,22 +196,6 @@ public class SearchDoc {
 
     public void setHighlightsInfo(List<String> highlightsInfo) {
         this.highlightsInfo = highlightsInfo;
-    }
-
-    public String getMiscellaneous() {
-        return miscellaneous;
-    }
-
-    public void setMiscellaneous(String miscellaneous) {
-        this.miscellaneous = miscellaneous;
-    }
-
-    public List<Accessory> getAccessoryInfo() {
-        return accessoryInfo;
-    }
-
-    public void setAccessoryInfo(List<Accessory> accessoryInfo) {
-        this.accessoryInfo = accessoryInfo;
     }
 
     public AdditionalInfo getAdditionalInfo() {
@@ -348,19 +238,67 @@ public class SearchDoc {
         this.indexTime = indexTime;
     }
 
-    public List<String> getAccessoryInfos() {
-        return accessoryInfos;
-    }
-
-    public void setAccessoryInfos(List<String> accessoryInfos) {
-        this.accessoryInfos = accessoryInfos;
-    }
-
     public List<String> getHighlights() {
         return highlights;
     }
 
     public void setHighlights(List<String> highlights) {
         this.highlights = highlights;
+    }
+
+    public List<String> getHighlightsImages() {
+        return highlightsImages;
+    }
+
+    public void setHighlightsImages(List<String> highlightsImages) {
+        this.highlightsImages = highlightsImages;
+    }
+
+    public List<String> getInfantTicketInfo() {
+        return infantTicketInfo;
+    }
+
+    public void setInfantTicketInfo(List<String> infantTicketInfo) {
+        this.infantTicketInfo = infantTicketInfo;
+    }
+
+    public List<String> getSeniorCitizenTicketInfo() {
+        return seniorCitizenTicketInfo;
+    }
+
+    public void setSeniorCitizenTicketInfo(List<String> seniorCitizenTicketInfo) {
+        this.seniorCitizenTicketInfo = seniorCitizenTicketInfo;
+    }
+
+    public String getActivityStartDate() {
+        return activityStartDate;
+    }
+
+    public void setActivityStartDate(String activityStartDate) {
+        this.activityStartDate = activityStartDate;
+    }
+
+    public String getActivityEndDate() {
+        return activityEndDate;
+    }
+
+    public void setActivityEndDate(String activityEndDate) {
+        this.activityEndDate = activityEndDate;
+    }
+
+    public List<AccessoryDetailEntries> getAccessoryDetail() {
+        return accessoryDetail;
+    }
+
+    public void setAccessoryDetail(List<AccessoryDetailEntries> accessoryDetail) {
+        this.accessoryDetail = accessoryDetail;
+    }
+
+    public List<String> getBookingDetail() {
+        return bookingDetail;
+    }
+
+    public void setBookingDetail(List<String> bookingDetail) {
+        this.bookingDetail = bookingDetail;
     }
 }

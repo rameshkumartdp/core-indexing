@@ -14,6 +14,7 @@ import org.apache.solr.client.solrj.request.UpdateRequest;
 import org.apache.solr.client.solrj.response.UpdateResponse;
 import org.apache.solr.common.SolrInputDocument;
 import org.bson.Document;
+import org.bson.types.Binary;
 
 import java.io.IOException;
 import java.lang.reflect.Field;
@@ -29,6 +30,7 @@ public class IndexDoc {
 
         while (cursor.hasNext()) {
             Document doc = cursor.next();
+
             SearchDoc document = transformDoc(doc, indexTime);
             searchDocList.add(document);
         }
@@ -36,7 +38,14 @@ public class IndexDoc {
     }
 
     public SearchDoc transformDoc(Document doc, String indexTime) {
+        doc.remove("displayImages");
+        doc.remove("aboutImages");
+        doc.put("_id", doc.get("_id"));
+        System.out.println(doc.get("_id"));
         String json = com.mongodb.util.JSON.serialize(doc);
+        json = json.replace("{ \"$oid\" :","").replace("} , \"serviceProviderId\""," , \"serviceProviderId\"").replace("} , \"serviceId\""," , \"serviceId\"");
+        json = json.replace("\"$date\"","").replace(" : {  :",":").replace("Z\"}","Z\"");
+
         System.out.println("JSON serialized Document: " + json);
         SearchDoc document = null;
         ObjectMapper mapper1 = new ObjectMapper();
@@ -48,11 +57,6 @@ public class IndexDoc {
         document.setName(document.getName().toLowerCase());
         document.setIndexTime(indexTime);
         document.setAboutInfo(document.getAdditionalInfo().getAboutInfo().getAbout());
-        document.setMiscellaneous(document.getAdditionalInfo().getMiscellaneous());
-        List<String> accList = new ArrayList<>();
-        accList.add("type:"+document.getAccessoryInfo().get(0).getType());
-        accList.add("description:"+document.getAccessoryInfo().get(0).getDescription());
-        document.setAccessoryInfos(accList);
         List<TicketDetails> ticketList = document.getTicketInfo();
         Iterator<TicketDetails> itr = ticketList.iterator();
         while(itr.hasNext()) {
@@ -64,19 +68,20 @@ public class IndexDoc {
             list.add("fromAge:"+details.getFromAge());
             list.add("noOfTotalTickets:"+details.getNoOfTotalTickets());
             list.add("toAge:"+details.getToAge());
-            if(details.getTicketCategory().equals("Adult")) {
-                document.setChildTicketInfo(list);
-            } else {
-                document.setAdultTicketInfo(list);
+            switch(details.getTicketCategory()) {
+                case "Adult" : document.setAdultTicketInfo(list);
+                case "Infant" : document.setInfantTicketInfo(list);
+                case "Child" : document.setChildTicketInfo(list);
+                case "SeniorCitizen" : document.setSeniorCitizenTicketInfo(list);
             }
         }
         List<String> highlightDesc = new ArrayList<>();
         List<Highlights> highlights = document.getAdditionalInfo().getHighlightsInfo().getHighlights();
         Iterator<Highlights> hItr = highlights.iterator();
         while(hItr.hasNext()) {
-            highlightDesc.add("description:"+hItr.next().getDescription());
+            highlightDesc.add(hItr.next().getDescription());
         }
-        document.setAccessoryInfos(highlightDesc);
+        document.setHighlights(highlightDesc);
         return document;
     }
 
