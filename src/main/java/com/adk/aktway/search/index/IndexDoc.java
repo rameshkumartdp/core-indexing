@@ -3,10 +3,8 @@ package com.adk.aktway.search.index;
 import com.adk.aktway.search.config.GlobalConstants;
 import com.adk.aktway.search.db.SpringMongoClient;
 import com.adk.aktway.search.docbuilder.SearchDoc;
-import com.adk.aktway.search.model.Highlights;
-import com.adk.aktway.search.model.TicketDetails;
 import com.adk.aktway.search.solr.SolrServerInitializer;
-import com.fasterxml.jackson.databind.ObjectMapper;
+import com.adk.aktway.search.transform.BaseFieldTransformations;
 import com.mongodb.client.MongoCursor;
 import org.apache.solr.client.solrj.SolrClient;
 import org.apache.solr.client.solrj.SolrServerException;
@@ -14,12 +12,14 @@ import org.apache.solr.client.solrj.request.UpdateRequest;
 import org.apache.solr.client.solrj.response.UpdateResponse;
 import org.apache.solr.common.SolrInputDocument;
 import org.bson.Document;
-import org.bson.types.Binary;
 
 import java.io.IOException;
 import java.lang.reflect.Field;
 import java.text.SimpleDateFormat;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Date;
+import java.util.List;
 
 public class IndexDoc {
 
@@ -31,59 +31,13 @@ public class IndexDoc {
         while (cursor.hasNext()) {
             Document doc = cursor.next();
 
-            SearchDoc document = transformDoc(doc, indexTime);
+            SearchDoc document = new BaseFieldTransformations().transformDoc(doc, indexTime);
             searchDocList.add(document);
         }
         postToSolr(searchDocList);
     }
 
-    public SearchDoc transformDoc(Document doc, String indexTime) {
-        doc.remove("displayImages");
-        doc.remove("aboutImages");
-        doc.put("_id", doc.get("_id"));
-        System.out.println(doc.get("_id"));
-        String json = com.mongodb.util.JSON.serialize(doc);
-        json = json.replace("{ \"$oid\" :","").replace("} , \"serviceProviderId\""," , \"serviceProviderId\"").replace("} , \"serviceId\""," , \"serviceId\"");
-        json = json.replace("\"$date\"","").replace(" : {  :",":").replace("Z\"}","Z\"");
 
-        System.out.println("JSON serialized Document: " + json);
-        SearchDoc document = null;
-        ObjectMapper mapper1 = new ObjectMapper();
-        try {
-            document = mapper1.readValue(json, SearchDoc.class);
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-        document.setName(document.getName().toLowerCase());
-        document.setIndexTime(indexTime);
-        document.setAboutInfo(document.getAdditionalInfo().getAboutInfo().getAbout());
-        List<TicketDetails> ticketList = document.getTicketInfo();
-        Iterator<TicketDetails> itr = ticketList.iterator();
-        while(itr.hasNext()) {
-            TicketDetails details = itr.next();
-            List<String> list = new ArrayList<>();
-            list.add("ticketCategory:"+details.getTicketCategory());
-            list.add("price:"+details.getPrice());
-            list.add("totalPrice:"+details.getTotalPrice());
-            list.add("fromAge:"+details.getFromAge());
-            list.add("noOfTotalTickets:"+details.getNoOfTotalTickets());
-            list.add("toAge:"+details.getToAge());
-            switch(details.getTicketCategory()) {
-                case "Adult" : document.setAdultTicketInfo(list);
-                case "Infant" : document.setInfantTicketInfo(list);
-                case "Child" : document.setChildTicketInfo(list);
-                case "SeniorCitizen" : document.setSeniorCitizenTicketInfo(list);
-            }
-        }
-        List<String> highlightDesc = new ArrayList<>();
-        List<Highlights> highlights = document.getAdditionalInfo().getHighlightsInfo().getHighlights();
-        Iterator<Highlights> hItr = highlights.iterator();
-        while(hItr.hasNext()) {
-            highlightDesc.add(hItr.next().getDescription());
-        }
-        document.setHighlights(highlightDesc);
-        return document;
-    }
 
     public void postToSolr(List<SearchDoc> searchDocList) {
         System.out.println("Sending documents to Solr Cloud");

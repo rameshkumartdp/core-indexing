@@ -1,16 +1,18 @@
 package com.adk.aktway.search.docbuilder;
 
-import com.adk.aktway.search.model.Accessory;
-import com.adk.aktway.search.model.AccessoryDetailEntries;
+import com.adk.aktway.search.model.AccessoryDetail;
 import com.adk.aktway.search.model.AdditionalInfo;
+import com.adk.aktway.search.model.BookingDetail;
 import com.adk.aktway.search.model.TicketDetails;
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonInclude;
+import jdk.nashorn.internal.ir.annotations.Ignore;
 import org.apache.solr.client.solrj.beans.Field;
-import org.bson.BSONObject;
 
 import java.util.ArrayList;
 import java.util.List;
 
+@JsonInclude(JsonInclude.Include.NON_NULL)
 public class SearchDoc {
 
     @Field("id")
@@ -46,13 +48,16 @@ public class SearchDoc {
     @Field
     private String contact;
 
-    @Field
+    private AccessoryDetail accessoryDetail;
+
     @JsonIgnore
-    private List<AccessoryDetailEntries> accessoryDetail = new ArrayList<>();
+    private List<String> accessoryDetailInfo = new ArrayList<>();
+
+    @Ignore
+    private BookingDetail bookingDetail;
 
     @Field
-    @JsonIgnore
-    private List<String> bookingDetail = new ArrayList<>();
+    private List<String> bookingInfo = new ArrayList<>();
 
     private  List<TicketDetails> ticketInfo = new ArrayList<>();
 
@@ -286,19 +291,35 @@ public class SearchDoc {
         this.activityEndDate = activityEndDate;
     }
 
-    public List<AccessoryDetailEntries> getAccessoryDetail() {
-        return accessoryDetail;
-    }
-
-    public void setAccessoryDetail(List<AccessoryDetailEntries> accessoryDetail) {
-        this.accessoryDetail = accessoryDetail;
-    }
-
-    public List<String> getBookingDetail() {
+    public BookingDetail getBookingDetail() {
         return bookingDetail;
     }
 
-    public void setBookingDetail(List<String> bookingDetail) {
+    public void setBookingDetail(BookingDetail bookingDetail) {
         this.bookingDetail = bookingDetail;
+    }
+
+    public List<String> getBookingInfo() {
+        return bookingInfo;
+    }
+
+    public void setBookingInfo(List<String> bookingInfo) {
+        this.bookingInfo = bookingInfo;
+    }
+
+    public AccessoryDetail getAccessoryDetail() {
+        return accessoryDetail;
+    }
+
+    public void setAccessoryDetail(AccessoryDetail accessoryDetail) {
+        this.accessoryDetail = accessoryDetail;
+    }
+
+    public List<String> getAccessoryDetailInfo() {
+        return accessoryDetailInfo;
+    }
+
+    public void setAccessoryDetailInfo(List<String> accessoryDetailInfo) {
+        this.accessoryDetailInfo = accessoryDetailInfo;
     }
 }
