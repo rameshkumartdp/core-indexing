@@ -37,8 +37,6 @@ public class IndexDoc {
         postToSolr(searchDocList);
     }
 
-
-
     public void postToSolr(List<SearchDoc> searchDocList) {
         System.out.println("Sending documents to Solr Cloud");
         List<SolrInputDocument> solrInputDocuments = convertToSolrInputDocuments(new ArrayList<>(searchDocList));
