@@ -43,9 +43,6 @@ public class SearchDoc {
     private String price;
 
     @Field
-    private List<String> highlightsImages;
-
-    @Field
     private String contact;
 
     private AccessoryDetail accessoryDetail;
@@ -90,7 +87,7 @@ public class SearchDoc {
     @Field
     private  List<String> highlights = new ArrayList<>();
 
-    @Field
+    //@Field
     private  List<String> highlightsInfo = new ArrayList<>();
 
     @Field
@@ -249,14 +246,6 @@ public class SearchDoc {
 
     public void setHighlights(List<String> highlights) {
         this.highlights = highlights;
-    }
-
-    public List<String> getHighlightsImages() {
-        return highlightsImages;
-    }
-
-    public void setHighlightsImages(List<String> highlightsImages) {
-        this.highlightsImages = highlightsImages;
     }
 
     public List<String> getInfantTicketInfo() {
