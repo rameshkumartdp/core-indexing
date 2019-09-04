@@ -31,7 +31,7 @@ public class BaseFieldTransformations {
         } catch (IOException e) {
             e.printStackTrace();
         }
-        document.setName(Optional.ofNullable(document.getName()).orElse(""));
+        document.setName(Optional.ofNullable(document.getName()).orElse("").toLowerCase());
         document.setIndexTime(indexTime);
         document.setAboutInfo(document.getAdditionalInfo().getAboutInfo().getAbout());
         List<TicketDetails> ticketList = document.getTicketInfo();
