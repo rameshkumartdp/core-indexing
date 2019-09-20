@@ -73,7 +73,9 @@ public class IndexDoc {
         for (Field f : obj.getClass().getDeclaredFields()) {
             f.setAccessible(true); //Mandatory
             try {
-                solrInputDocument.addField(getFieldName(f), f.get(obj));
+                if(!f.getAnnotation(org.apache.solr.client.solrj.beans.Field.class).value().equalsIgnoreCase("exclude")) {
+                    solrInputDocument.addField(getFieldName(f), f.get(obj));
+                }
             } catch (IllegalAccessException iaE) {
                 System.err.println("Error in converting SearchDoc to SolrInputDoc "+ iaE);
             }

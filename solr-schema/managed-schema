@@ -391,128 +391,39 @@
       <tokenizer class="solr.WhitespaceTokenizerFactory"/>
     </analyzer>
   </fieldType>
-
-<fieldType name="textSpell" class="solr.TextField" positionIncrementGap="100" omitNorms="true">
-    <analyzer type="index">
-        <tokenizer class="solr.StandardTokenizerFactory"/>
-        <filter class="solr.StopFilterFactory" ignoreCase="true" words="stopwords.txt"/>
-        <filter class="solr.LowerCaseFilterFactory"/>
-        <filter class="solr.StandardFilterFactory"/>
-    </analyzer>
-    <analyzer type="query">
-        <tokenizer class="solr.StandardTokenizerFactory"/>
-        <filter class="solr.SynonymFilterFactory" synonyms="synonyms.txt" ignoreCase="true"  expand="true"/>
-        <filter class="solr.StopFilterFactory" ignoreCase="true" words="stopwords.txt"/>
-        <filter class="solr.LowerCaseFilterFactory"/>
-        <filter class="solr.StandardFilterFactory"/>
-    </analyzer>
-</fieldType>
-
-<fieldType name="nameSuggest" class="solr.TextField" positionIncrementGap="100" omitNorms="true">
-    <analyzer type="index">
-        <tokenizer class="solr.StandardTokenizerFactory"/>
-        <filter class="solr.StopFilterFactory" ignoreCase="true" words="stopwords.txt"/>
-        <filter class="solr.LowerCaseFilterFactory"/>
-        <filter class="solr.StandardFilterFactory"/>
-    </analyzer>
-    <analyzer type="query">
-        <tokenizer class="solr.StandardTokenizerFactory"/>
-        <filter class="solr.SynonymFilterFactory" synonyms="synonyms.txt" ignoreCase="true"  expand="true"/>
-        <filter class="solr.StopFilterFactory" ignoreCase="true" words="stopwords.txt"/>
-        <filter class="solr.LowerCaseFilterFactory"/>
-        <filter class="solr.StandardFilterFactory"/>
-    </analyzer>
-</fieldType>
-
-<fieldType name="nameSearch" class="solr.TextField" positionIncrementGap="100">
-  <analyzer type="index">
-    <tokenizer class="solr.StandardTokenizerFactory"/>
-    <filter class="solr.LowerCaseFilterFactory"/>
-  </analyzer>
-  <analyzer type="query">
-    <tokenizer class="solr.StandardTokenizerFactory"/>
-    <filter class="solr.LowerCaseFilterFactory"/>
-  </analyzer>
-</fieldType>
-
   <fieldType name="tfloat" class="solr.TrieFloatField" positionIncrementGap="0" docValues="true" precisionStep="8"/>
   <fieldType name="tfloats" class="solr.TrieFloatField" positionIncrementGap="0" docValues="true" multiValued="true" precisionStep="8"/>
   <fieldType name="tint" class="solr.TrieIntField" positionIncrementGap="0" docValues="true" precisionStep="8"/>
   <fieldType name="tints" class="solr.TrieIntField" positionIncrementGap="0" docValues="true" multiValued="true" precisionStep="8"/>
   <fieldType name="tlong" class="solr.TrieLongField" positionIncrementGap="0" docValues="true" precisionStep="8"/>
   <fieldType name="tlongs" class="solr.TrieLongField" positionIncrementGap="0" docValues="true" multiValued="true" precisionStep="8"/>
+  <field name="_class" type="strings"/>
+  <field name="_id" type="strings"/>
   <field name="_root_" type="string" docValues="false" indexed="true" stored="false"/>
   <field name="_text_" type="text_general" multiValued="true" indexed="true" stored="false"/>
   <field name="_version_" type="long" indexed="true" stored="false"/>
-  
 
-<!--FIELDS
-  <field name="id" type="string" indexed="true" stored="true" multiValued="false" omitNorms="true"/>
-  <field name="serviceProviderId" type="string" indexed="true" stored="true" multiValued="false" omitNorms="true"/>
-  <field name="serviceId" type="string" indexed="true" stored="true" omitNorms="true" default=""/>
-  <field name="searchText" type="string" indexed="true" stored="true" multiValued="false" omitNorms="true"/>
-  <field name="name" type="string" indexed="true" stored="true" multiValued="false" omitNorms="true" docValues="true"/>
-  <field name="description" type="string" indexed="true" stored="true" multiValued="false" omitNorms="true"/>
-  <field name="location" type="string" indexed="true" stored="true" multiValued="false" omitNorms="true" />
-  <field name="category" type="string" indexed="true" stored="true" multiValued="true" omitNorms="true" />
-  <field name="price" type="string" indexed="true" stored="true" multiValued="true" omitNorms="true" />
-  <field name="duration" type="string" indexed="true" stored="true" multiValued="false" omitNorms="true" />
-  <field name="totalNoOfTickets" type="string" indexed="true" stored="true" multiValued="false" omitNorms="true" />
-  <field name="displayImages" type="string" indexed="true" stored="true" multiValued="true" omitNorms="true" />
-  <field name="aboutImages" type="string" indexed="true" stored="true" multiValued="true" omitNorms="true"/>
-  <field name="contact" type="string" indexed="true" stored="true" multiValued="false" omitNorms="true"/>
-  <field name="ticketCategory" type="string" indexed="true" stored="true" multiValued="false" omitNorms="true" />
-  <field name="price" type="string" indexed="true" stored="true" multiValued="false" omitNorms="true" />
-  <field name="totalPrice" type="string" indexed="true" stored="true" multiValued="false" omitNorms="true" />
-  <field name="fromAge" type="string" indexed="true" stored="true" multiValued="false" omitNorms="true"/>
-  <field name="noOfTotalTickets" type="string" indexed="true" stored="true" multiValued="false" omitNorms="true"/>
-  <field name="toAge" type="string" indexed="true" stored="true" multiValued="false" omitNorms="true"/>
-  <field name="type" type="string" indexed="true" stored="true" multiValued="false" omitNorms="true"/>
-  <field name="description" type="string" indexed="true" stored="true" multiValued="false" omitNorms="true"/>
-  <field name="measurements" type="string" indexed="true" stored="true" multiValued="true" omitNorms="true"/>
-  <field name="about" type="string" indexed="true" stored="true" multiValued="false" omitNorms="true"/>
-  <field name="decsription" type="string" indexed="true" stored="true" multiValued="false" omitNorms="true"/>
-  <field name="miscellaneous" type="string" indexed="true" stored="true" multiValued="false" omitNorms="true"/>
-  <field name="activityStartDate" type="string" indexed="true" stored="true" multiValued="false" omitNorms="true"/>
-  <field name="activityEndDate" type="string" indexed="true" stored="true" multiValued="false" omitNorms="true"/>
-  <field name="first" type="string" indexed="true" stored="true" multiValued="false" omitNorms="true"/>
-  <field name="last" type="string" indexed="true" stored="true" multiValued="false" omitNorms="true"/>
-  <field name="grade" type="string" indexed="true" stored="true" multiValued="false" omitNorms="true"/>
-  <field name="subject" type="string" indexed="true" stored="true" multiValued="false" omitNorms="true"/>
-  <field name="test" type="string" indexed="true" stored="true" multiValued="false" omitNorms="true"/>
-  <field name="marks" type="string" indexed="true" stored="true" multiValued="false" omitNorms="true"/>
-  <field name="_class" type="string" indexed="true" stored="true" multiValued="false" omitNorms="true"/>
-<!--FIELDS-->
-
-
- <field name="id" type="string" indexed="true" stored="true" multiValued="false" omitNorms="true"/>
-  <field name="serviceProviderId" type="string" indexed="true" stored="true" multiValued="false" omitNorms="true"/>
-  <field name="serviceId" type="string" indexed="true" stored="true" omitNorms="true" default=""/>
-  <field name="searchText" type="string" indexed="true" stored="true" multiValued="false" omitNorms="true"/>
-  <field name="name" type="text_general" indexed="true" stored="true" multiValued="false" omitNorms="true" docValues="true"/>
-  <field name="description" type="string" indexed="true" stored="true" multiValued="false" omitNorms="true"/>
-  <field name="location" type="string" indexed="true" stored="true" multiValued="false" omitNorms="true" />
-  <field name="category" type="string" indexed="true" stored="true" multiValued="false" omitNorms="true" />
-  <field name="price" type="string" indexed="true" stored="true" multiValued="false" omitNorms="true" />
-  <field name="duration" type="string" indexed="true" stored="true" multiValued="false" omitNorms="true" />
-  <field name="totalNoOfTickets" type="int" indexed="true" stored="true" multiValued="false" omitNorms="true" />
-  <field name="itemnumber" type="string" indexed="true" stored="true" multiValued="false" omitNorms="true" />
-  <field name="contact" type="string" indexed="true" stored="true" multiValued="false" omitNorms="true"/>
-  <field name="activityStartDate" type="string" indexed="true" stored="true" multiValued="false" omitNorms="true"/>
-  <field name="activityEndDate" type="string" indexed="true" stored="true" multiValued="false" omitNorms="true"/>
-  <field name="displayImages" type="string" indexed="true" stored="true" multiValued="false" omitNorms="true" />
-  <field name="aboutImages" type="string" indexed="true" stored="true" multiValued="false" omitNorms="true"/>
-   <field name="childTicketInfo" type="string" indexed="true" stored="true" multiValued="true" omitNorms="true"/>
-   <field name="accessoryType" type="string" indexed="true" stored="true" multiValued="false" omitNorms="true"/>
-   <field name="accessoryDescription" type="string" indexed="true" stored="true" multiValued="false" omitNorms="true"/>
-   <field name="accessoryMeasurements" type="string" indexed="true" stored="true" multiValued="false" omitNorms="true"/>
-   <field name="aboutInfo" type="string" indexed="true" stored="true" multiValued="false" omitNorms="true"/>
-   <field name="highlightsInfo" type="string" indexed="true" stored="true" multiValued="true" omitNorms="true"/>
-   <field name="miscellaneous" type="string" indexed="true" stored="true" multiValued="false" omitNorms="true"/>
-  <field name="_class" type="string" indexed="true" stored="true" multiValued="false" omitNorms="true"/>
-
-
-
+  <field name="id" type="string" multiValued="false" indexed="true" required="true" stored="true"/>
+  <field name="serviceProviderId" type="string" multiValued="false" indexed="true" stored="true"/>
+  <field name="serviceId" type="string" multiValued="false" indexed="true" stored="true"/>
+  <field name="searchText" type="string" multiValued="true" indexed="true" stored="true" docValues="true"/>
+  <field name="name" type="string" multiValued="false" indexed="true" stored="true" docValues="true"/>
+  <field name="description" type="string" multiValued="false" indexed="true" stored="true" docValues="true"/>
+  <field name="location" type="string" multiValued="false" indexed="true" stored="true" docValues="true"/>
+  <field name="category" type="string" multiValued="false" indexed="true" stored="true" docValues="true"/>
+  <field name="price" type="string" multiValued="false" indexed="true" stored="true" docValues="true"/>
+  <field name="contact" type="string" multiValued="false" indexed="true" stored="true"  docValues="true"/>
+  <field name="accessoryDetailInfo" type="string" multiValued="true" indexed="true" stored="true"  docValues="true"/>
+  <field name="bookingInfo" type="string" multiValued="true" indexed="true" stored="true"  docValues="true"/>
+  <field name="adultTicketInfo" type="string" multiValued="true" indexed="true" stored="true"  docValues="true"/>
+  <field name="childTicketInfo" type="string" multiValued="true" indexed="true" stored="true"  docValues="true"/>
+  <field name="infantTicketInfo" type="string" multiValued="true" indexed="true" stored="true"  docValues="true"/>
+  <field name="seniorCitizenTicketInfo" type="string" multiValued="true" indexed="true" stored="true"  docValues="true"/>
+  <field name="aboutInfo" type="string" multiValued="true" indexed="true" stored="true"  docValues="true"/>
+  <field name="activityStartDate" type="string" multiValued="false" indexed="true" stored="true"  docValues="true"/>
+  <field name="activityEndDate" type="string" multiValued="false" indexed="true" stored="true" docValues="true"/>
+  <field name="highlights" type="string" multiValued="true" indexed="true" stored="true" docValues="true"/>
+  <field name="indexTime" type="string" multiValued="false" indexed="true" stored="true" docValues="true"/>
 
   <dynamicField name="*_txt_en_split_tight" type="text_en_splitting_tight" indexed="true" stored="true"/>
   <dynamicField name="*_descendent_path" type="descendent_path" indexed="true" stored="true"/>

@@ -10,7 +10,7 @@ public class GlobalConstants {
     public static final String MONGO_PORT = PropertiesLoader.getProperty("mongo_port");
     public static final String MONGO_DB = PropertiesLoader.getProperty("mongo_db");
     public static final String MONGO_COLLECTION = PropertiesLoader.getProperty("mongo_collection");
-    public static final String INDEX_TIME_FORMAT = "yyyy_MM_dd_HHmmSSS";
+    public static final String INDEX_TIME_FORMAT = "yyyy-MM-dd'T'HH:mm:ss'Z'";
 
     public static void init() { }
 

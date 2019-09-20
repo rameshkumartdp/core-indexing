@@ -45,17 +45,21 @@ public class SearchDoc {
     @Field
     private String contact;
 
+    @Field(value = "exclude")
     private AccessoryDetail accessoryDetail;
 
+    @Field
     @JsonIgnore
     private List<String> accessoryDetailInfo = new ArrayList<>();
 
+    @Field(value = "exclude")
     @Ignore
     private BookingDetail bookingDetail;
 
     @Field
     private List<String> bookingInfo = new ArrayList<>();
 
+    @Field(value = "exclude")
     private  List<TicketDetails> ticketInfo = new ArrayList<>();
 
     @Field
@@ -79,6 +83,7 @@ public class SearchDoc {
     @JsonIgnore
     private  List<String> seniorCitizenTicketInfo ;
 
+    @Field(value = "exclude")
     private AdditionalInfo additionalInfo;
 
     @Field
@@ -87,10 +92,10 @@ public class SearchDoc {
     @Field
     private  List<String> highlights = new ArrayList<>();
 
-    //@Field
+    @Field
     private  List<String> highlightsInfo = new ArrayList<>();
 
-    @Field
+    @Field(value = "exclude")
     private  String _class;
 
     @Field
